@@ -1,14 +1,18 @@
+using System.Data;
 using System.Reflection;
 using AnnouncementApi.Repositories;
 using AnnouncementApi.Repositories.Interfaces;
 using AnnouncementApi.Services;
 using AnnouncementApi.Services.Interfaces;
+using Library.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// TODO: register DB connection
+builder.Services.AddSingleton<DatabaseInitializer>();
+
 builder.Services.AddScoped<IDbConnection>(sp =>
     new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -51,6 +55,12 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(Log.Logger);
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbInit = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+    await dbInit.InitializeAsync();
+}
 
 if (app.Environment.IsDevelopment())
 {
