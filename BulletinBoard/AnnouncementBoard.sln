@@ -4,9 +4,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{4106
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{25254282-D683-47EB-966D-C11967211FE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletinApi", "BulletinApi\BulletinApi.csproj", "{FE4B5243-B2E8-4564-8A4E-65D8D66F18C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnnouncementApi", "AnnouncementApi\AnnouncementApi.csproj", "{FE4B5243-B2E8-4564-8A4E-65D8D66F18C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserApi", "UserApi\UserApi.csproj", "{57BE3AED-ADDE-494F-A374-41E47D9EDBFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthApi", "AuthApi\AuthApi.csproj", "{57BE3AED-ADDE-494F-A374-41E47D9EDBFD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{27FA4DD7-EC3C-4EF7-BE37-12243E7ABD98}"
 EndProject
