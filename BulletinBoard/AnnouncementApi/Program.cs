@@ -5,6 +5,7 @@ using AnnouncementApi.Repositories.Interfaces;
 using AnnouncementApi.Services;
 using AnnouncementApi.Services.Interfaces;
 using Library.Data;
+using Library.Middleware;
 using Microsoft.Data.SqlClient;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -36,7 +37,7 @@ builder.Services.AddSwaggerGen(options =>
     options.DocInclusionPredicate((_, apiDesc) =>
         apiDesc.ActionDescriptor.DisplayName?.Contains("AnnouncementAPI") ?? false
     );
-    
+
     // Configuration of XML docs
     options.CustomSchemaIds(type => type.FullName!.Replace('+', '.'));
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -73,6 +74,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseExceptionMiddleware();
 app.MapControllers();
 
 await app.RunAsync();
