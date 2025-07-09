@@ -9,6 +9,8 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 // TODO: register DB connection
+builder.Services.AddScoped<IDbConnection>(sp =>
+    new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
