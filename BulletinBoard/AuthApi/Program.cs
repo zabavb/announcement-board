@@ -5,6 +5,7 @@ using AuthApi.Repositories.Interfaces;
 using AuthApi.Services;
 using AuthApi.Services.Interfaces;
 using Library.Data;
+using Library.Middleware;
 using Microsoft.Data.SqlClient;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -33,7 +34,7 @@ builder.Services.AddSwaggerGen(options =>
     options.DocInclusionPredicate((_, apiDesc) =>
         apiDesc.ActionDescriptor.DisplayName?.Contains("AuthAPI") ?? false
     );
-    
+
     // Configuration of XML docs
     options.CustomSchemaIds(type => type.FullName!.Replace('+', '.'));
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -66,6 +67,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseExceptionMiddleware();
 app.MapControllers();
 
 await app.RunAsync();
