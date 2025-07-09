@@ -12,9 +12,9 @@ public class AnnouncementService(
     private readonly IAnnouncementRepository _repository = repository;
     private readonly ILogger<IAnnouncementService> _log = logger;
 
-    public async Task<ICollection<Announcement>> GetAsync(Category? subcategory)
+    public async Task<ICollection<Announcement>> GetAsync(Guid? subcategoryId)
     {
-        var announcements = await _repository.GetAsync(subcategory);
+        var announcements = await _repository.GetAsync(subcategoryId);
         _log.LogInformation("Successfully retrieved announcements.");
 
         return announcements;
@@ -22,6 +22,7 @@ public class AnnouncementService(
 
     public async Task CreateAsync(Announcement announcement)
     {
+        announcement.Id = Guid.NewGuid();
         await _repository.CreateAsync(announcement);
         _log.LogInformation("Successfully created announcement.");
     }

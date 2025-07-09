@@ -7,6 +7,7 @@ public class Announcement
     public string Description { get; set; } = string.Empty;
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public Status Status { get; set; } = Status.Active;
-    public Category? Category { get; set; }
-    public Category? Subcategory { get; set; }
+
+    public Category Category { get; set; } = new();
+    public Category Subcategory { get; set; } = new();
 }

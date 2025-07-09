@@ -12,9 +12,9 @@ public class AnnouncementsController(IAnnouncementService service) : ControllerB
     private readonly IAnnouncementService _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] Category? subcategory)
+    public async Task<IActionResult> Get([FromQuery] Guid? subcategoryId)
     {
-        var announcements = await _service.GetAsync(subcategory);
+        var announcements = await _service.GetAsync(subcategoryId);
         return Ok(announcements);
     }
 
