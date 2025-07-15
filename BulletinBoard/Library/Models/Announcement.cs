@@ -8,6 +8,5 @@ public class Announcement
     public DateTime CreatedDate { get; set; } = DateTime.Now;
     public Status Status { get; set; } = Status.Active;
 
-    public Category Category { get; set; } = new();
-    public Category Subcategory { get; set; } = new();
+    public Guid SubcategoryId { get; set; }
 }
