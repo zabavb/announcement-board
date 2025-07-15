@@ -1,0 +1,50 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control"/>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" type="password" class="form-control"/>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+    <a asp-action="Register" class="btn btn-link">Register</a>
+</form>
+
+<hr/>
+<div>
+    <p class="text-muted">Or sign in with Google:</p>
+    <div id="g_id_onload"
+         data-client_id="@ViewBag.GoogleClientId"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+</div>
+
+<form id="oauthForm" method="post" asp-action="OAuthLogin">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="token" id="oauthToken"/>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        function handleCredentialResponse(response) {
+            document.getElementById("oauthToken").value = response.credential;
+            document.getElementById("oauthForm").submit();
+        }
+    </script>
+}

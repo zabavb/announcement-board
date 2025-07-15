@@ -12,10 +12,21 @@ public class AnnouncementsController(IAnnouncementService service) : ControllerB
     private readonly IAnnouncementService _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] Guid? subcategoryId)
+    public async Task<IActionResult> Get([FromQuery] Guid? categoryId, [FromQuery] Guid? subcategoryId)
     {
-        var announcements = await _service.GetAsync(subcategoryId);
+        var announcements = await _service.GetAsync(categoryId, subcategoryId);
         return Ok(announcements);
+    }
+
+    [Authorize]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Announcement>> GetById(Guid id)
+    {
+        if (id == Guid.Empty)
+            return NotFound("ID was not provided.");
+
+        var announcement = await _service.GetByIdAsync(id);
+        return Ok(announcement);
     }
 
     [Authorize]

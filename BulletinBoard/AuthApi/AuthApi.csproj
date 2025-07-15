@@ -4,14 +4,22 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>1591</NoWarn>
+	</PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Library\Library.csproj" />
     </ItemGroup>
+	
+	<ItemGroup>
+	  <Content Include="Data\Queries\*.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="15.0.0" />
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
       <PackageReference Include="Dapper" Version="2.1.66" />
       <PackageReference Include="Google.Apis.Auth" Version="1.70.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />

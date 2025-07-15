@@ -10,30 +10,34 @@ public class AnnouncementRepository(IDbConnection db) : IAnnouncementRepository
     private readonly IDbConnection _db = db;
     private const string QueriesDir = "Data/Queries/";
 
-    public async Task<ICollection<Announcement>> GetAsync(Guid? subcategoryId)
+    public async Task<ICollection<Announcement>> GetAsync(Guid? categoryId, Guid? subcategoryId)
     {
-        var sql = await File.ReadAllTextAsync(QueriesDir + "GetAllAnnouncementsWithCategory.sql");
+        var sql = await File.ReadAllTextAsync(QueriesDir + "GetAllAnnouncements.sql");
 
-        var result = await _db.QueryAsync<Announcement, Category, Category, Announcement>(
+        var result = await _db.QueryAsync<Announcement>(
             sql,
-            (announcement, category, subcategory) =>
-            {
-                announcement.Category = category;
-                announcement.Subcategory = subcategory;
-                return announcement;
-            },
-            new { SubcategoryId = subcategoryId },
-            splitOn: "CategoryId,SubcategoryId"
+            new { SubcategoryId = subcategoryId, CategoryId = categoryId }
         );
 
         return result.ToList();
+    }
+
+    public async Task<Announcement?> GetByIdAsync(Guid id)
+    {
+        var sql = await File.ReadAllTextAsync(QueriesDir + "GetAnnouncementById.sql");
+
+        var result = await _db.QueryFirstOrDefaultAsync<Announcement>(
+            sql,
+            new { Id = id }
+        );
+        return result;
     }
 
     public async Task CreateAsync(Announcement announcement)
     {
         if (announcement is null)
             throw new ArgumentNullException(nameof(announcement));
-        
+
         var sql = await File.ReadAllTextAsync(QueriesDir + "InsertAnnouncement.sql");
 
         await _db.ExecuteAsync(sql, new
@@ -43,8 +47,7 @@ public class AnnouncementRepository(IDbConnection db) : IAnnouncementRepository
             announcement.Description,
             announcement.CreatedDate,
             Status = (int)announcement.Status,
-            CategoryId = announcement.Category.Id,
-            SubcategoryId = announcement.Subcategory.Id
+            announcement.SubcategoryId
         });
     }
 
@@ -52,7 +55,7 @@ public class AnnouncementRepository(IDbConnection db) : IAnnouncementRepository
     {
         if (announcement == null)
             throw new ArgumentNullException(nameof(announcement));
-        
+
         var sql = await File.ReadAllTextAsync(QueriesDir + "UpdateAnnouncement.sql");
 
         await _db.ExecuteAsync(sql, new
@@ -61,8 +64,7 @@ public class AnnouncementRepository(IDbConnection db) : IAnnouncementRepository
             announcement.Title,
             announcement.Description,
             Status = (int)announcement.Status,
-            CategoryId = announcement.Category?.Id,
-            SubcategoryId = announcement.Subcategory?.Id
+            announcement.SubcategoryId
         });
     }
 

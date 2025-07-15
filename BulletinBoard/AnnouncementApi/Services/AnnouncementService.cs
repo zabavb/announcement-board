@@ -12,12 +12,22 @@ public class AnnouncementService(
     private readonly IAnnouncementRepository _repository = repository;
     private readonly ILogger<IAnnouncementService> _log = logger;
 
-    public async Task<ICollection<Announcement>> GetAsync(Guid? subcategoryId)
+    public async Task<ICollection<Announcement>> GetAsync(Guid? categoryId, Guid? subcategoryId)
     {
-        var announcements = await _repository.GetAsync(subcategoryId);
-        _log.LogInformation("Successfully retrieved announcements.");
+        var announcements = await _repository.GetAsync(categoryId, subcategoryId);
+        _log.LogInformation("Retrieved announcements with filters: SubcategoryId={SubId}, CategoryId={CatId}",
+            subcategoryId, categoryId);
 
         return announcements;
+    }
+
+    public async Task<Announcement?> GetByIdAsync(Guid id)
+    {
+        var announcement = await _repository.GetByIdAsync(id) ??
+                           throw new KeyNotFoundException("Announcement not found.");
+        
+        _log.LogInformation("User with ID [{id}] successfully fetched.", id);
+        return announcement;
     }
 
     public async Task CreateAsync(Announcement announcement)

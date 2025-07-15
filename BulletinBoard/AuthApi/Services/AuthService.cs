@@ -1,4 +1,6 @@
-﻿using AuthApi.Models;
+﻿using System.Security.Cryptography;
+using System.Text;
+using AuthApi.Models;
 using AuthApi.Repositories.Interfaces;
 using AuthApi.Services.Interfaces;
 using AutoMapper;
@@ -21,7 +23,8 @@ public class AuthService(IAuthRepository repository, IMapper mapper, ILogger<IAu
         if (user.Password == null)
             throw new InvalidOperationException("Password is missing.");
 
-        if (user.Password != password)
+        var hashedPassword = HashPassword(password);
+        if (user.Password != hashedPassword)
         {
             _log.LogWarning("User [{email}] is not authenticated.", email);
             return null;
@@ -33,12 +36,13 @@ public class AuthService(IAuthRepository repository, IMapper mapper, ILogger<IAu
 
     public async Task RegisterAsync(string fullName, string email, string password)
     {
+        var hashedPassword = HashPassword(password);
         var user = new User
         {
             Id = Guid.NewGuid(),
             FullName = fullName,
             Email = email,
-            Password = password
+            Password = hashedPassword
         };
 
         await _repository.RegisterAsync(user);
@@ -58,5 +62,13 @@ public class AuthService(IAuthRepository repository, IMapper mapper, ILogger<IAu
 
         _log.LogInformation("OAuthAsync() => return {user}", user);
         return user;
+    }
+
+    private static string HashPassword(string password)
+    {
+        var encoded = Encoding.UTF8.GetBytes(password);
+        var hash = SHA256.HashData(encoded);
+        var result = Convert.ToBase64String(hash);
+        return result.Substring(0, result.Length - 1);
     }
 }

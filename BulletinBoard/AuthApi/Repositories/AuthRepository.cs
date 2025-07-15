@@ -14,7 +14,7 @@ public class AuthRepository(IDbConnection db) : IAuthRepository
     {
         var sql = await File.ReadAllTextAsync(QueriesDir + "GetUserByEmail.sql");
 
-        return await _db.QueryFirstOrDefaultAsync<User>(sql);
+        return await _db.QueryFirstOrDefaultAsync<User>(sql, new { Email = email });
     }
 
     public async Task RegisterAsync(User user)

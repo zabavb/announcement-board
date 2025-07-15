@@ -1,0 +1,1 @@
+﻿global using LoginViewModel = Library.Models.Auth.LoginRequest;
