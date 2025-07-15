@@ -1,2 +1,2 @@
-INSERT INTO Announcements (Id, Title, Description, CreatedDate, Status, CategoryId, SubcategoryId)
-VALUES (@Id, @Title, @Description, @CreatedDate, @Status, @CategoryId, @SubcategoryId);
+INSERT INTO Announcements (Id, Title, Description, CreatedDate, Status, SubcategoryId)
+VALUES (@Id, @Title, @Description, @CreatedDate, @Status, @SubcategoryId);
