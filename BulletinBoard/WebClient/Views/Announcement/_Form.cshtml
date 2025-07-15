@@ -1,0 +1,70 @@
+﻿@model Library.Models.Announcement
+@using Library.Models.Dto
+
+@{
+    var categoryGroups = (ViewBag.Categories as List<CategoryWithSubcategoryDto>)?
+        .GroupBy(c => new { c.CategoryId, c.CategoryName })
+        .ToList() ?? [];
+
+    var selectedSubcategoryId = Model.SubcategoryId;
+    var selectedCategoryId = categoryGroups
+        .FirstOrDefault(g => g.Any(s => s.SubcategoryId == selectedSubcategoryId))?.Key.CategoryId;
+
+    var isEdit = Model.Id != Guid.Empty;
+}
+
+<form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+    @if (isEdit)
+    {
+        <input type="hidden" asp-for="Id"/>
+    }
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control"/>
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div hidden class="mb-3">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="categorySelect" name="SelectedCategoryId" disabled>
+            @foreach (var group in categoryGroups)
+            {
+                <option value="@group.Key.CategoryId" selected="@(group.Key.CategoryId == selectedCategoryId)">
+                    @group.Key.CategoryName
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SubcategoryId" class="form-label">Subcategory</label>
+        <select asp-for="SubcategoryId" class="form-select">
+            <option value="">-- Select Subcategory --</option>
+            @foreach (var group in categoryGroups)
+            {
+                foreach (var sub in group)
+                {
+                    <option value="@sub.SubcategoryId" selected="@(sub.SubcategoryId == selectedSubcategoryId)">
+                        @sub.SubcategoryName (under @group.Key.CategoryName)
+                    </option>
+                }
+            }
+        </select>
+        <span asp-validation-for="SubcategoryId" class="text-danger"></span>
+        <small class="text-muted">Category is selected automatically from subcategory.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">@((isEdit ? "Update" : "Create"))</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}
