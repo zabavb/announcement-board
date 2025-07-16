@@ -29,12 +29,12 @@ builder.Services.AddSession();
 builder.Services.AddHttpClient("AnnouncementApi",
     client =>
     {
-        client.BaseAddress = new Uri("announcement-board-server-apf5a7h9cxhbdsfu.polandcentral-01.azurewebsites.net");
+        client.BaseAddress = new Uri("https://announcement-board-server-apf5a7h9cxhbdsfu.polandcentral-01.azurewebsites.net");
     });
 builder.Services.AddHttpClient("AuthApi",
     client =>
     {
-        client.BaseAddress = new Uri("announcement-board-server-apf5a7h9cxhbdsfu.polandcentral-01.azurewebsites.net");
+        client.BaseAddress = new Uri("https://announcement-board-server-apf5a7h9cxhbdsfu.polandcentral-01.azurewebsites.net");
     });
 
 builder.Services.Configure<GoogleAuthOptions>(
