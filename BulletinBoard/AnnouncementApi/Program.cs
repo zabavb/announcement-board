@@ -16,7 +16,7 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<DatabaseInitializer>();
+// builder.Services.AddSingleton<DatabaseInitializer>();
 
 builder.Services.AddScoped<IDbConnection>(_ =>
     new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -84,8 +84,8 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbInit = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
-    await dbInit.InitializeAsync();
+    /*var dbInit = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+    await dbInit.InitializeAsync();*/
 
     var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
     await seeder.SeedAsync();
