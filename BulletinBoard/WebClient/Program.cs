@@ -27,8 +27,15 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
 builder.Services.AddHttpClient("AnnouncementApi",
-    client => { client.BaseAddress = new Uri("https://localhost:7014/"); });
-builder.Services.AddHttpClient("AuthApi", client => { client.BaseAddress = new Uri("https://localhost:7017/"); });
+    client =>
+    {
+        client.BaseAddress = new Uri("announcement-board-server-apf5a7h9cxhbdsfu.polandcentral-01.azurewebsites.net");
+    });
+builder.Services.AddHttpClient("AuthApi",
+    client =>
+    {
+        client.BaseAddress = new Uri("announcement-board-server-apf5a7h9cxhbdsfu.polandcentral-01.azurewebsites.net");
+    });
 
 builder.Services.Configure<GoogleAuthOptions>(
     builder.Configuration.GetSection("OAuth"));
@@ -69,8 +76,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Announcement}/{action=Index}")
+        name: "default",
+        pattern: "{controller=Announcement}/{action=Index}")
     .WithStaticAssets();
 
 await app.RunAsync();
